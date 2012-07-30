@@ -241,6 +241,7 @@ static CGFloat TCTableRowHeight = 44.f;
     
     field.contentInset = UIEdgeInsetsMake(-8,-8,-8,-8);
     field.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
+    //field.dataDetectorTypes = UIDataDetectorTypeLink;
     field.showsHorizontalScrollIndicator = NO;
     field.showsVerticalScrollIndicator = NO;
     field.tag = TCMessageTextViewTag;

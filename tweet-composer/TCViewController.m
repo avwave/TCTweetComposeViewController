@@ -73,7 +73,7 @@
     
     TCTweetComposeViewController *twitter = [[TCTweetComposeViewController alloc] initComposer];
     [twitter setInitialText:@"This tweet was composed with TCTweet"];
-    [twitter addURL:[NSURL URLWithString:@"http://compass.getsprouted.com"]];
+    [twitter addURL:[NSURL URLWithString:@"https://github.com/phildow/TCTweetComposeViewController"]];
     //[twitter addImage:[UIImage imageNamed:@"CompassIcon.png"]];
     
     twitter.completionHandler = ^(TCTweetComposeViewControllerResult result) {
