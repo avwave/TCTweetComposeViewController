@@ -6,7 +6,39 @@
 //  Copyright (c) 2012 Philip Dow. All rights reserved.
 //
 
+/*
+ Copyright (C) 2012 Philip Dow / Sprouted. All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ 
+ * Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+ 
+ * Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+ 
+ * Neither the name of the author nor the names of its contributors may be used
+   to endorse or promote products derived from this software without specific
+   prior written permission.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
 #import "TCTweetComposeViewController.h"
+
+static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUserName";
 
 @interface TWTeetComposeRootViewController : UIViewController
 
@@ -42,11 +74,12 @@
 - (UITableViewCell*) accountCell;
 - (UITableViewCell*) messageCell;
 
-- (void) updateCharacterCount;
 - (void) setImageViewHidden:(BOOL)hidden;
+- (void) updateCharacterCount;
+- (void) updateSendButton;
 
 - (void) twitterAccounts:(void(^)(NSArray *accounts, NSError *error))handler;
-- (void) performTwitterRequest:(TWRequest*)request;
+- (void) performTwitterPostStatusRequest:(TWRequest*)request;
 - (void) postStatusUpdateWithMedia;
 - (void) postStatusUpdate;
 
@@ -216,12 +249,33 @@
         // returns false
         
         if ([_accounts count]>0) {
-            _selectedAccount = 0;
-            NSString *text = [NSString stringWithFormat:@"@%@",[[_accounts objectAtIndex:0] username]];
+            
+            NSInteger defaultIndex = 0;
+            NSString *defaultUser = [[NSUserDefaults standardUserDefaults] objectForKey:TCTwitterLastSelectedUserNameKey];
+            
+            if ( defaultUser ) {
+                defaultIndex = [_accounts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                    if ( [[(ACAccount*)obj username] isEqualToString:defaultUser] ) {
+                        *stop = YES;
+                        return YES;
+                    } else {
+                        return NO;
+                    }
+                }];
+                if ( defaultIndex == NSNotFound ) {
+                    defaultIndex = 0;
+                }
+            }
+            
+            _selectedAccount = defaultIndex;
+            NSString *username = [[_accounts objectAtIndex:defaultIndex] username];
+            NSString *text = [NSString stringWithFormat:@"@%@",username];
             [(UILabel*)[[self accountCell] viewWithTag:101] setText:text];
         }
         
         [_pickerView reloadAllComponents];
+        [_pickerView selectRow:_selectedAccount inComponent:0 animated:NO];
+        [self updateSendButton];
     }];
 }
 
@@ -330,7 +384,7 @@
         return 44.f;
         break;
     case 1:
-        return tableView.frame.size.height - 44.0
+        return tableView.frame.size.height - 44.f
         ;
         break;
     default:
@@ -359,7 +413,10 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     _selectedAccount = row;
-    [(UILabel*)[[self accountCell] viewWithTag:101] setText:[NSString stringWithFormat:@"@%@",[[_accounts objectAtIndex:row] username]]];
+    NSString *username = [[_accounts objectAtIndex:row] username];
+    [(UILabel*)[[self accountCell] viewWithTag:101] setText:[NSString stringWithFormat:@"@%@",username]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:username forKey:TCTwitterLastSelectedUserNameKey];
 }
 
 #pragma mark - Text Field / Text View Delegate
@@ -376,7 +433,7 @@
     [self updateCharacterCount];
 }
 
-#pragma mark - Utilities
+#pragma mark - UI Utilities
 
 - (void) setImageViewHidden:(BOOL)hidden
 {
@@ -412,7 +469,16 @@
         field.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     }
     
-    _controller.navigationItem.rightBarButtonItem.enabled = (textLength!=0);
+    [self updateSendButton];
+}
+
+- (void) updateSendButton
+{
+    UITextView *textView = (UITextView*)[[self messageCell] viewWithTag:101];
+    NSInteger textLength = [textView.text length];
+    
+    BOOL canSend = (textLength != 0 && _selectedAccount != NSNotFound);
+    _controller.navigationItem.rightBarButtonItem.enabled = canSend;
 }
 
 #pragma mark - User Actions
@@ -468,7 +534,7 @@
     [request addMultiPartData:[status dataUsingEncoding:NSUTF8StringEncoding] withName:@"status" type:@"multipart/form-data"];
     
     request.account = [_accounts objectAtIndex:_selectedAccount];
-    [self performTwitterRequest:request];
+    [self performTwitterPostStatusRequest:request];
 }
 
 - (void) postStatusUpdate
@@ -489,10 +555,10 @@
     TWRequest *request = [[TWRequest alloc] initWithURL:[NSURL URLWithString:kStatusUpdateURLString] parameters:params requestMethod:TWRequestMethodPOST];
     
     request.account = [_accounts objectAtIndex:_selectedAccount];
-    [self performTwitterRequest:request];
+    [self performTwitterPostStatusRequest:request];
 }
 
-- (void) performTwitterRequest:(TWRequest*)request
+- (void) performTwitterPostStatusRequest:(TWRequest*)request
 {
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
         if ( error ) {
