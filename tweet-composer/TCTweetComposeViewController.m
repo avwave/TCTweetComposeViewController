@@ -53,6 +53,13 @@ static NSString * TCAccountLabel = @"Account:";
 static NSString * TCStatusUpdateURLString = @"https://api.twitter.com/1/statuses/update.json";
 static NSString * TCMediaStatusUpdateURLString = @"https://upload.twitter.com/1/statuses/update_with_media.json";
 
+// UI View Tags
+
+static NSInteger TCAccountFieldTag = 101;
+static NSInteger TCCharCountFieldTag = 102;
+static NSInteger TCMessageTextViewTag = 101;
+static NSInteger TCMessageImageViewTag = 102;
+
 // UI Frames
 static CGFloat TCTableRowHeight = 44.f;
 
@@ -68,7 +75,15 @@ static CGFloat TCTableRowHeight = 44.f;
 #define TCMessageTextFrame CGRectMake(8, 8, 320-(8+8), 200-44)
 #define TCMessageImageFrame CGRectMake(320-(64+8), 8, 64, 64)
 
+#pragma mark -
+
 @interface TWTeetComposeRootViewController : UIViewController
+
+// placeholder
+
+@end
+
+@implementation TWTeetComposeRootViewController
 
 // placeholder
 
@@ -94,6 +109,8 @@ static CGFloat TCTableRowHeight = 44.f;
     NSMutableArray *_images;
     NSMutableArray *_URLs;
     
+    BOOL _showsImages;
+    BOOL _showsURLs;
     BOOL _isPresented;
     BOOL _sending;
 }
@@ -103,8 +120,14 @@ static CGFloat TCTableRowHeight = 44.f;
 - (UITableViewCell*) messageCell;
 
 - (void) setImageViewHidden:(BOOL)hidden;
+- (void) updateAttachedURLs;
 - (void) updateCharacterCount;
 - (void) updateSendButton;
+
+- (UITextView*) messageTextView;
+- (UIImageView*) messageImageView;
+- (UITextField*) accountTextField;
+- (UILabel*) charCountTextField;
 
 - (void) twitterAccounts:(void(^)(NSArray *accounts, NSError *error))handler;
 - (void) performTwitterPostStatusRequest:(TWRequest*)request;
@@ -114,6 +137,7 @@ static CGFloat TCTableRowHeight = 44.f;
 @end
 
 #pragma mark -
+#pragma mark TCTweetComposeViewController
 
 @implementation TCTweetComposeViewController
 
@@ -164,6 +188,9 @@ static CGFloat TCTableRowHeight = 44.f;
     
     _accounts = [[NSArray alloc] init];
     _selectedAccount = NSNotFound;
+    
+    _showsImages = YES;
+    _showsURLs = YES;
     _isPresented = NO;
     _sending = NO;
         
@@ -184,14 +211,14 @@ static CGFloat TCTableRowHeight = 44.f;
     count.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     count.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     count.textAlignment = UITextAlignmentRight;
+    count.tag = TCCharCountFieldTag;
     count.text = @"140";
-    count.tag = 102;
     
     label.text = NSLocalizedString(TCAccountLabel, TCAccountLabel);
     label.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     
+    field.tag = TCAccountFieldTag;
     field.delegate = self;
-    field.tag = 101;
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell addSubview:field];
@@ -216,11 +243,11 @@ static CGFloat TCTableRowHeight = 44.f;
     field.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
     field.showsHorizontalScrollIndicator = NO;
     field.showsVerticalScrollIndicator = NO;
+    field.tag = TCMessageTextViewTag;
     field.delegate = self;
-    field.tag = 101;
     
+    imageView.tag = TCMessageImageViewTag;
     imageView.hidden = YES;
-    imageView.tag = 102;
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell addSubview:imageView];
@@ -258,8 +285,15 @@ static CGFloat TCTableRowHeight = 44.f;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [[[self messageCell] viewWithTag:101] becomeFirstResponder];
+    // update the appearance
+    [self setImageViewHidden:([_images count]==0)];
+    [self updateCharacterCount];
+    [self updateAttachedURLs];
     
+    // show the keyboard
+    [[self messageTextView] becomeFirstResponder];
+    
+    // get the accounts
     [self twitterAccounts:^(NSArray *accounts, NSError *error) {
         if (error) {
             // display the error
@@ -298,7 +332,7 @@ static CGFloat TCTableRowHeight = 44.f;
             _selectedAccount = defaultIndex;
             NSString *username = [[_accounts objectAtIndex:defaultIndex] username];
             NSString *text = [NSString stringWithFormat:@"@%@",username];
-            [(UILabel*)[[self accountCell] viewWithTag:101] setText:text];
+            [self accountTextField].text = text;
         }
         
         [_pickerView reloadAllComponents];
@@ -325,7 +359,8 @@ static CGFloat TCTableRowHeight = 44.f;
         return NO;
     }
     
-    [(UITextView*)[[self messageCell] viewWithTag:101] setText:text];
+    [self messageTextView].text = text;
+    [self updateCharacterCount];
     return YES;
 }
 
@@ -339,9 +374,7 @@ static CGFloat TCTableRowHeight = 44.f;
     }
     
     [_images addObject:image];
-    [(UIImageView*)[[self messageCell] viewWithTag:102] setImage:image];
-    [self setImageViewHidden:NO];
-    [self updateCharacterCount];
+    [self messageImageView].image = image;
     return YES;
 }
 
@@ -352,7 +385,6 @@ static CGFloat TCTableRowHeight = 44.f;
     }
     
     [_URLs addObject:url];
-    [self updateCharacterCount];
     return YES;
 }
 
@@ -363,9 +395,7 @@ static CGFloat TCTableRowHeight = 44.f;
     }
     
     [_images removeAllObjects];
-    [(UIImageView*)[[self messageCell] viewWithTag:102] setImage:nil];
-    [self setImageViewHidden:YES];
-    [self updateCharacterCount];
+    [self messageImageView].image = nil;
     return YES;
 }
 
@@ -376,6 +406,28 @@ static CGFloat TCTableRowHeight = 44.f;
     }
     
     [_URLs removeAllObjects];
+    return YES;
+}
+
+#pragma mark -
+
+- (BOOL) setShowsImages:(BOOL)showsImages
+{
+    if (_isPresented) {
+        return NO;
+    }
+    
+    _showsImages = showsImages;
+    return YES;
+}
+
+- (BOOL) setShowsURLs:(BOOL)showsURLs
+{
+    if (_isPresented) {
+        return NO;
+    }
+    
+    _showsURLs = showsURLs;
     return YES;
 }
 
@@ -440,7 +492,7 @@ static CGFloat TCTableRowHeight = 44.f;
 {
     _selectedAccount = row;
     NSString *username = [[_accounts objectAtIndex:row] username];
-    [(UILabel*)[[self accountCell] viewWithTag:101] setText:[NSString stringWithFormat:@"@%@",username]];
+    [self accountTextField].text = [NSString stringWithFormat:@"@%@",username];
     
     [[NSUserDefaults standardUserDefaults] setObject:username forKey:TCTwitterLastSelectedUserNameKey];
 }
@@ -450,7 +502,7 @@ static CGFloat TCTableRowHeight = 44.f;
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     _pickerView.hidden = NO;
-    [[[self messageCell] viewWithTag:101] resignFirstResponder];
+    [[self messageTextView] resignFirstResponder];
     return NO;
 }
 
@@ -463,11 +515,26 @@ static CGFloat TCTableRowHeight = 44.f;
 
 - (void) setImageViewHidden:(BOOL)hidden
 {
+    if ( !_showsImages ) {
+        return;
+    }
+    
     CGRect textFrame = TCMessageTextFrame;
     if (!hidden) textFrame.size.width -= TCMessageImageFrame.size.width;
     
-    [[[self messageCell] viewWithTag:102] setHidden:hidden];
-    [[[self messageCell] viewWithTag:101] setFrame:textFrame];
+    [self messageImageView].hidden = hidden;
+    [self messageTextView].frame = textFrame;
+}
+
+- (void) updateAttachedURLs
+{
+    if ( !_showsURLs ) {
+        return;
+    }
+    
+    for ( NSURL *URL in _URLs ) {
+        [self messageTextView].text = [[self messageTextView].text stringByAppendingFormat:@" %@",[URL absoluteString]];
+    }
 }
 
 - (void) updateCharacterCount
@@ -479,12 +546,17 @@ static CGFloat TCTableRowHeight = 44.f;
     static NSInteger kTwitterURLLength = 28;
     static NSInteger kMaxTweetLength = 140;
     
-    UITextView *textView = (UITextView*)[[self messageCell] viewWithTag:101];
-    UILabel *field = (UILabel*)[[self accountCell] viewWithTag:102];
+    UITextView *textView = [self messageTextView];
+    UILabel *field = [self charCountTextField];
     
     NSInteger length = [textView.text length];
     length += ([_images count]*kTwitterPicURLLength);
-    length += ([_URLs count]*kTwitterURLLength);
+    
+    if ( !_showsURLs ) {
+        // length should include hidden URLs if we aren't showing them
+        length += ([_URLs count]*kTwitterURLLength);
+    }
+    
     NSInteger remaining = kMaxTweetLength - length;
     
     field.text = [NSString stringWithFormat:@"%i",remaining];
@@ -494,16 +566,37 @@ static CGFloat TCTableRowHeight = 44.f;
         field.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     }
     
+    // always update the send button whenever the text changes
     [self updateSendButton];
 }
 
 - (void) updateSendButton
 {
-    UITextView *textView = (UITextView*)[[self messageCell] viewWithTag:101];
-    NSInteger textLength = [textView.text length];
-    
-    BOOL canSend = (textLength != 0 && _selectedAccount != NSNotFound);
+    BOOL hasText = [[self messageTextView] hasText];
+    BOOL canSend = (hasText && _selectedAccount != NSNotFound);
     _controller.navigationItem.rightBarButtonItem.enabled = canSend;
+}
+
+#pragma mark -
+
+- (UITextField*) accountTextField
+{
+    return (UITextField*)[[self accountCell] viewWithTag:TCAccountFieldTag];
+}
+
+- (UILabel*) charCountTextField
+{
+    return (UILabel*)[[self accountCell] viewWithTag:TCCharCountFieldTag];
+}
+
+- (UITextView*) messageTextView
+{
+    return (UITextView*)[[self messageCell] viewWithTag:TCMessageTextViewTag];
+}
+
+- (UIImageView*) messageImageView
+{
+    return (UIImageView*)[[self messageCell] viewWithTag:TCMessageImageViewTag];
 }
 
 #pragma mark - User Actions
@@ -546,11 +639,13 @@ static CGFloat TCTableRowHeight = 44.f;
     }
     
     //  Add the data of the status as parameter "status"
-    NSString *status = [(UITextView*)[[self messageCell] viewWithTag:101] text];
+    NSString *status = [self messageTextView].text;
     
-    // append URLs
-    for ( NSURL *URL in _URLs ) {
-        status = [status stringByAppendingFormat:@" %@", [URL absoluteString]];
+    // append URLs only if we aren't already showing them
+    if ( !_showsURLs ) {
+        for ( NSURL *URL in _URLs ) {
+            status = [status stringByAppendingFormat:@" %@", [URL absoluteString]];
+        }
     }
     
     [request addMultiPartData:[status dataUsingEncoding:NSUTF8StringEncoding] withName:@"status" type:@"multipart/form-data"];
@@ -562,11 +657,13 @@ static CGFloat TCTableRowHeight = 44.f;
 - (void) postStatusUpdate
 {
     //  Add the data of the status as parameter "status"
-    NSString *status = [(UITextView*)[[self messageCell] viewWithTag:101] text];
+    NSString *status = [self messageTextView].text;
     
-    // append URLs
-    for ( NSURL *URL in _URLs ) {
-        status = [status stringByAppendingFormat:@" %@", [URL absoluteString]];
+    // append URLs only if we aren't already showing them
+    if ( !_showsURLs ) {
+        for ( NSURL *URL in _URLs ) {
+            status = [status stringByAppendingFormat:@" %@", [URL absoluteString]];
+        }
     }
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -580,7 +677,9 @@ static CGFloat TCTableRowHeight = 44.f;
 
 - (void) performTwitterPostStatusRequest:(TWRequest*)request
 {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if ( error ) {
             NSLog(@"Error performing twitter request: %@", error);
         }/* else {
@@ -631,13 +730,5 @@ static CGFloat TCTableRowHeight = 44.f;
         }
     }];
 }
-
-@end
-
-#pragma mark -
-
-@implementation TWTeetComposeRootViewController
-
-// placeholder
 
 @end
