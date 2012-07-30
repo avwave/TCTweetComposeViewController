@@ -18,7 +18,7 @@
 		E3BCAB6615C6198800553E05 /* TCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCAB6515C6198800553E05 /* TCViewController.m */; };
 		E3BCAB6915C6198800553E05 /* TCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3BCAB6715C6198800553E05 /* TCViewController.xib */; };
 		E3BCABB215C61D0E00553E05 /* TCTweetComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCABB115C61D0E00553E05 /* TCTweetComposeViewController.m */; };
-		E3F3F42615C6E13F008745CB /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F3F42515C6E13F008745CB /* Icon.png */; };
+		E3F3F42615C6E13F008745CB /* CompassIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F3F42515C6E13F008745CB /* CompassIcon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +39,7 @@
 		E3BCAB6815C6198800553E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/TCViewController.xib; sourceTree = "<group>"; };
 		E3BCABB015C61D0E00553E05 /* TCTweetComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCTweetComposeViewController.h; sourceTree = "<group>"; };
 		E3BCABB115C61D0E00553E05 /* TCTweetComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCTweetComposeViewController.m; sourceTree = "<group>"; };
-		E3F3F42515C6E13F008745CB /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		E3F3F42515C6E13F008745CB /* CompassIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CompassIcon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +97,7 @@
 				E3BCAB6715C6198800553E05 /* TCViewController.xib */,
 				E3BCABB015C61D0E00553E05 /* TCTweetComposeViewController.h */,
 				E3BCABB115C61D0E00553E05 /* TCTweetComposeViewController.m */,
-				E3F3F42515C6E13F008745CB /* Icon.png */,
+				E3F3F42515C6E13F008745CB /* CompassIcon.png */,
 				E3BCAB5915C6198800553E05 /* Supporting Files */,
 			);
 			path = "tweet-composer";
@@ -168,7 +168,7 @@
 			files = (
 				E3BCAB5D15C6198800553E05 /* InfoPlist.strings in Resources */,
 				E3BCAB6915C6198800553E05 /* TCViewController.xib in Resources */,
-				E3F3F42615C6E13F008745CB /* Icon.png in Resources */,
+				E3F3F42615C6E13F008745CB /* CompassIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

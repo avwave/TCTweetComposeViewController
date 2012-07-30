@@ -4,6 +4,8 @@
 //
 //  Created by Philip Dow on 7/29/12.
 //  Copyright (c) 2012 Philip Dow. All rights reserved.
+//  
+//  ARC
 //
 
 /*
@@ -38,7 +40,33 @@
 
 #import "TCTweetComposeViewController.h"
 
+// user default key for last selected account
 static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUserName";
+
+// localizable strings
+static NSString * TCTweetNavBarTitle = @"Tweet";
+static NSString * TCSendButtonTitle = @"Send";
+static NSString * TCAccountLabel = @"Account:";
+
+// API access points
+// https://dev.twitter.com/docs/ios/posting-images-using-twrequest
+static NSString * TCStatusUpdateURLString = @"https://api.twitter.com/1/statuses/update.json";
+static NSString * TCMediaStatusUpdateURLString = @"https://upload.twitter.com/1/statuses/update_with_media.json";
+
+// UI Frames
+static CGFloat TCTableRowHeight = 44.f;
+
+#define TCTweetTableFrame CGRectMake(0, 0, 320, 200)
+#define TCAccountPickerViewFrame CGRectMake(0, 200, 320, 216)
+
+#define TCAccountCellFrame CGRectMake(0, 0, 44, 480)
+#define TCAccountLabelFrame CGRectMake(8, 44/2-20/2, 70, 21)
+#define TCAccountFieldFrame CGRectMake(8+70, 44/2-20/2, 320-(70+8+36+8), 21)
+#define TCAccountCharacterCountFrame CGRectMake(320-(36+8), 44/2-20/2, 36, 21)
+
+#define TCMessageCellFrame CGRectMake(0, 0, 320, 480-44-44)
+#define TCMessageTextFrame CGRectMake(8, 8, 320-(8+8), 200-44)
+#define TCMessageImageFrame CGRectMake(320-(64+8), 8, 64, 64)
 
 @interface TWTeetComposeRootViewController : UIViewController
 
@@ -104,20 +132,20 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
 - (UIViewController*) initializedRootViewController
 {
     TWTeetComposeRootViewController *controller = [[TWTeetComposeRootViewController alloc] init];
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, 200) style:UITableViewStylePlain];
-    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 200, 320, 216)];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:TCTweetTableFrame style:UITableViewStylePlain];
+    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:TCAccountPickerViewFrame];
     
     controller.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
     tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
     pickerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth); // fix
     
-    controller.title = NSLocalizedString(@"Compose Tweet", @"");
+    controller.title = NSLocalizedString(TCTweetNavBarTitle, TCTweetNavBarTitle);
     controller.view.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     [controller.view addSubview:tableView];
     [controller.view addSubview:pickerView];
     
     controller.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-    controller.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Send", @"Send") style:UIBarButtonItemStyleDone target:self action:@selector(send:)];
+    controller.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(TCSendButtonTitle, TCSendButtonTitle) style:UIBarButtonItemStyleDone target:self action:@selector(send:)];
     
     pickerView.hidden = YES;
     pickerView.showsSelectionIndicator = YES;
@@ -148,10 +176,10 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
         return _accountCell;
     }
     
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 44, 480)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(8, 44/2-20/2, 70, 21)];
-    UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(8+70, 44/2-20/2, 320-(70+8+36+8), 21)];
-    UILabel *count = [[UILabel alloc] initWithFrame:CGRectMake(320-(36+8), 44/2-20/2, 36, 21)];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:TCAccountCellFrame];
+    UILabel *label = [[UILabel alloc] initWithFrame:TCAccountLabelFrame];
+    UITextField *field = [[UITextField alloc] initWithFrame:TCAccountFieldFrame];
+    UILabel *count = [[UILabel alloc] initWithFrame:TCAccountCharacterCountFrame];
     
     count.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     count.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
@@ -159,7 +187,7 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
     count.text = @"140";
     count.tag = 102;
     
-    label.text = NSLocalizedString(@"Account:", @"Account:");
+    label.text = NSLocalizedString(TCAccountLabel, TCAccountLabel);
     label.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     
     field.delegate = self;
@@ -180,9 +208,9 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
         return _messageCell;
     }
     
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 480-44-44)];
-    UITextView *field = [[UITextView alloc] initWithFrame:CGRectMake(8, 8, 320-(8+8), _tableView.frame.size.height - 44.0)];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(_tableView.frame.size.width-(64+8), 8, 64, 64)];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:TCMessageCellFrame];
+    UITextView *field = [[UITextView alloc] initWithFrame:TCMessageTextFrame];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:TCMessageImageFrame];
     
     field.contentInset = UIEdgeInsetsMake(-8,-8,-8,-8);
     field.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
@@ -287,7 +315,6 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
-    //return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - Public API
@@ -381,14 +408,13 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
 {
     switch (indexPath.row) {
     case 0:
-        return 44.f;
+        return TCTableRowHeight;
         break;
     case 1:
-        return tableView.frame.size.height - 44.f
-        ;
+        return TCTweetTableFrame.size.height - TCTableRowHeight;
         break;
     default:
-        return 44.f;
+        return TCTableRowHeight;
         break;
     }
 }
@@ -437,8 +463,8 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
 
 - (void) setImageViewHidden:(BOOL)hidden
 {
-    CGRect textFrame = CGRectMake(8, 8, 320-(8+8), _tableView.frame.size.height - 44.0);
-    if (!hidden) textFrame.size.width -= (64);
+    CGRect textFrame = TCMessageTextFrame;
+    if (!hidden) textFrame.size.width -= TCMessageImageFrame.size.width;
     
     [[[self messageCell] viewWithTag:102] setHidden:hidden];
     [[[self messageCell] viewWithTag:101] setFrame:textFrame];
@@ -456,8 +482,7 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
     UITextView *textView = (UITextView*)[[self messageCell] viewWithTag:101];
     UILabel *field = (UILabel*)[[self accountCell] viewWithTag:102];
     
-    NSInteger length, textLength;
-    length = textLength = [textView.text length];
+    NSInteger length = [textView.text length];
     length += ([_images count]*kTwitterPicURLLength);
     length += ([_URLs count]*kTwitterURLLength);
     NSInteger remaining = kMaxTweetLength - length;
@@ -511,10 +536,7 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
 
 - (void) postStatusUpdateWithMedia
 {
-    // https://dev.twitter.com/docs/ios/posting-images-using-twrequest
-    static NSString * kMediaStatusUpdateURLString = @"https://upload.twitter.com/1/statuses/update_with_media.json";
-    
-    TWRequest *request = [[TWRequest alloc] initWithURL:[NSURL URLWithString:kMediaStatusUpdateURLString] parameters:nil requestMethod:TWRequestMethodPOST];
+    TWRequest *request = [[TWRequest alloc] initWithURL:[NSURL URLWithString:TCMediaStatusUpdateURLString] parameters:nil requestMethod:TWRequestMethodPOST];
     
     // Add the data of the image with the correct parameter name, "media[]"
     for (NSUInteger i = 0; i < [_images count]; i++ ) {
@@ -539,8 +561,6 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
 
 - (void) postStatusUpdate
 {
-    static NSString * kStatusUpdateURLString = @"https://api.twitter.com/1/statuses/update.json";
-    
     //  Add the data of the status as parameter "status"
     NSString *status = [(UITextView*)[[self messageCell] viewWithTag:101] text];
     
@@ -552,7 +572,7 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:status forKey:@"status"];
     
-    TWRequest *request = [[TWRequest alloc] initWithURL:[NSURL URLWithString:kStatusUpdateURLString] parameters:params requestMethod:TWRequestMethodPOST];
+    TWRequest *request = [[TWRequest alloc] initWithURL:[NSURL URLWithString:TCStatusUpdateURLString] parameters:params requestMethod:TWRequestMethodPOST];
     
     request.account = [_accounts objectAtIndex:_selectedAccount];
     [self performTwitterPostStatusRequest:request];
@@ -563,13 +583,13 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
         if ( error ) {
             NSLog(@"Error performing twitter request: %@", error);
-        } else {
+        }/* else {
             NSStringEncoding responseEncoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)[urlResponse textEncodingName]));
             NSString *responseString = [[NSString alloc] initWithData:responseData encoding:responseEncoding];
             
             NSLog(@"%@", [urlResponse allHeaderFields]);
             NSLog(@"%@", responseString);
-        }
+        } */
         
         if ( self.completionHandler) {
             dispatch_async(dispatch_get_main_queue(),^{
@@ -594,7 +614,6 @@ static NSString * TCTwitterLastSelectedUserNameKey = @"TCTwitterLastSelectedUser
     [_accountStore requestAccessToAccountsWithType:twitterAccountType withCompletionHandler:^(BOOL granted, NSError *error) {
         if (error) {
             NSLog(@"%@",error);
-            
             if (handler) {
                 dispatch_async(dispatch_get_main_queue(),^{
                     handler(nil,error);

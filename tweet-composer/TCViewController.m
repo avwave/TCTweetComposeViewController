@@ -4,6 +4,8 @@
 //
 //  Created by Philip Dow on 7/29/12.
 //  Copyright (c) 2012 Philip Dow. All rights reserved.
+//  
+//  ARC
 //
 
 /*
@@ -63,15 +65,16 @@
 }
 
 - (IBAction)sendTweet:(id)sender
-{
+{    
     if (![TCTweetComposeViewController canSendTweet]) {
         NSLog(@"Cannot send tweets, no account set up");
         return;
     }
     
     TCTweetComposeViewController *twitter = [[TCTweetComposeViewController alloc] initComposer];
-    [twitter addURL:[NSURL URLWithString:@"http://compass.getsprouted.com/newsletter"]];
-    //[twitter addImage:[UIImage imageNamed:@"Icon.png"]];
+    [twitter setInitialText:@"This tweet was composed with TCTweet"];
+    [twitter addURL:[NSURL URLWithString:@"http://compass.getsprouted.com"]];
+    [twitter addImage:[UIImage imageNamed:@"CompassIcon.png"]];
     
     twitter.completionHandler = ^(TCTweetComposeViewControllerResult result) {
         [self dismissModalViewControllerAnimated:YES];
