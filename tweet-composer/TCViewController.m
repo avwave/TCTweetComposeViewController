@@ -7,6 +7,7 @@
 //
 
 #import "TCViewController.h"
+#import "TCTweetComposeViewController.h"
 
 @interface TCViewController ()
 
@@ -29,6 +30,24 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+- (IBAction)sendTweet:(id)sender
+{
+    if (![TCTweetComposeViewController canSendTweet]) {
+        NSLog(@"Cannot send tweets, no account set up");
+        return;
+    }
+    
+    TCTweetComposeViewController *twitter = [[TCTweetComposeViewController alloc] initComposer];
+    [twitter addURL:[NSURL URLWithString:@"http://compass.getsprouted.com/newsletter"]];
+    //[twitter addImage:[UIImage imageNamed:@"Icon.png"]];
+    
+    twitter.completionHandler = ^(TCTweetComposeViewControllerResult result) {
+        [self dismissModalViewControllerAnimated:YES];
+    };
+    
+    [self presentModalViewController:twitter animated:YES];
 }
 
 @end

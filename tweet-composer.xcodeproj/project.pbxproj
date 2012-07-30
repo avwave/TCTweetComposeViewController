@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E347E26215C62B550058C2BC /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E347E26115C62B550058C2BC /* Accounts.framework */; };
+		E347E26515C62DB60058C2BC /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E347E26415C62DB60058C2BC /* Twitter.framework */; };
 		E3BCAB5315C6198800553E05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BCAB5215C6198800553E05 /* UIKit.framework */; };
 		E3BCAB5515C6198800553E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BCAB5415C6198800553E05 /* Foundation.framework */; };
 		E3BCAB5715C6198800553E05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BCAB5615C6198800553E05 /* CoreGraphics.framework */; };
@@ -15,9 +17,13 @@
 		E3BCAB6315C6198800553E05 /* TCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCAB6215C6198800553E05 /* TCAppDelegate.m */; };
 		E3BCAB6615C6198800553E05 /* TCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCAB6515C6198800553E05 /* TCViewController.m */; };
 		E3BCAB6915C6198800553E05 /* TCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3BCAB6715C6198800553E05 /* TCViewController.xib */; };
+		E3BCABB215C61D0E00553E05 /* TCTweetComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCABB115C61D0E00553E05 /* TCTweetComposeViewController.m */; };
+		E3F3F42615C6E13F008745CB /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E3F3F42515C6E13F008745CB /* Icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E347E26115C62B550058C2BC /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		E347E26415C62DB60058C2BC /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		E3BCAB4E15C6198800553E05 /* tweet-composer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tweet-composer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3BCAB5215C6198800553E05 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E3BCAB5415C6198800553E05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -31,6 +37,9 @@
 		E3BCAB6415C6198800553E05 /* TCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TCViewController.h; sourceTree = "<group>"; };
 		E3BCAB6515C6198800553E05 /* TCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TCViewController.m; sourceTree = "<group>"; };
 		E3BCAB6815C6198800553E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/TCViewController.xib; sourceTree = "<group>"; };
+		E3BCABB015C61D0E00553E05 /* TCTweetComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCTweetComposeViewController.h; sourceTree = "<group>"; };
+		E3BCABB115C61D0E00553E05 /* TCTweetComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCTweetComposeViewController.m; sourceTree = "<group>"; };
+		E3F3F42515C6E13F008745CB /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +47,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E347E26515C62DB60058C2BC /* Twitter.framework in Frameworks */,
+				E347E26215C62B550058C2BC /* Accounts.framework in Frameworks */,
 				E3BCAB5315C6198800553E05 /* UIKit.framework in Frameworks */,
 				E3BCAB5515C6198800553E05 /* Foundation.framework in Frameworks */,
 				E3BCAB5715C6198800553E05 /* CoreGraphics.framework in Frameworks */,
@@ -67,6 +78,8 @@
 		E3BCAB5115C6198800553E05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E347E26415C62DB60058C2BC /* Twitter.framework */,
+				E347E26115C62B550058C2BC /* Accounts.framework */,
 				E3BCAB5215C6198800553E05 /* UIKit.framework */,
 				E3BCAB5415C6198800553E05 /* Foundation.framework */,
 				E3BCAB5615C6198800553E05 /* CoreGraphics.framework */,
@@ -82,6 +95,9 @@
 				E3BCAB6415C6198800553E05 /* TCViewController.h */,
 				E3BCAB6515C6198800553E05 /* TCViewController.m */,
 				E3BCAB6715C6198800553E05 /* TCViewController.xib */,
+				E3BCABB015C61D0E00553E05 /* TCTweetComposeViewController.h */,
+				E3BCABB115C61D0E00553E05 /* TCTweetComposeViewController.m */,
+				E3F3F42515C6E13F008745CB /* Icon.png */,
 				E3BCAB5915C6198800553E05 /* Supporting Files */,
 			);
 			path = "tweet-composer";
@@ -152,6 +168,7 @@
 			files = (
 				E3BCAB5D15C6198800553E05 /* InfoPlist.strings in Resources */,
 				E3BCAB6915C6198800553E05 /* TCViewController.xib in Resources */,
+				E3F3F42615C6E13F008745CB /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +182,7 @@
 				E3BCAB5F15C6198800553E05 /* main.m in Sources */,
 				E3BCAB6315C6198800553E05 /* TCAppDelegate.m in Sources */,
 				E3BCAB6615C6198800553E05 /* TCViewController.m in Sources */,
+				E3BCABB215C61D0E00553E05 /* TCTweetComposeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +298,7 @@
 				E3BCAB6E15C6198800553E05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
