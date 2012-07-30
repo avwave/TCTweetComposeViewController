@@ -700,9 +700,9 @@ static CGFloat TCTableRowHeight = 44.f;
             dispatch_async(dispatch_get_main_queue(),^{
                 UIAlertView *alert = [self postStatusFailedAlert];
                 alert.message = [error localizedDescription];
-                alert.delegate = self;
                 [alert show];
             });
+            _sending = NO;
             return;
         }/* else {
             NSStringEncoding responseEncoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)[urlResponse textEncodingName]));
@@ -780,7 +780,7 @@ static CGFloat TCTableRowHeight = 44.f;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     // any alert indicates an error, and we dispatch to the completion handler
-    // with a cancel
+    // with a cancel. a delegate must be set on the alert
     
     if ( self.completionHandler) {
         dispatch_async(dispatch_get_main_queue(),^{
