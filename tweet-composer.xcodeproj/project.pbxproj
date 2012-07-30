@@ -1,0 +1,287 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E3BCAB5315C6198800553E05 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BCAB5215C6198800553E05 /* UIKit.framework */; };
+		E3BCAB5515C6198800553E05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BCAB5415C6198800553E05 /* Foundation.framework */; };
+		E3BCAB5715C6198800553E05 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BCAB5615C6198800553E05 /* CoreGraphics.framework */; };
+		E3BCAB5D15C6198800553E05 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3BCAB5B15C6198800553E05 /* InfoPlist.strings */; };
+		E3BCAB5F15C6198800553E05 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCAB5E15C6198800553E05 /* main.m */; };
+		E3BCAB6315C6198800553E05 /* TCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCAB6215C6198800553E05 /* TCAppDelegate.m */; };
+		E3BCAB6615C6198800553E05 /* TCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3BCAB6515C6198800553E05 /* TCViewController.m */; };
+		E3BCAB6915C6198800553E05 /* TCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E3BCAB6715C6198800553E05 /* TCViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E3BCAB4E15C6198800553E05 /* tweet-composer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tweet-composer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3BCAB5215C6198800553E05 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		E3BCAB5415C6198800553E05 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E3BCAB5615C6198800553E05 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E3BCAB5A15C6198800553E05 /* tweet-composer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "tweet-composer-Info.plist"; sourceTree = "<group>"; };
+		E3BCAB5C15C6198800553E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E3BCAB5E15C6198800553E05 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E3BCAB6015C6198800553E05 /* tweet-composer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "tweet-composer-Prefix.pch"; sourceTree = "<group>"; };
+		E3BCAB6115C6198800553E05 /* TCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TCAppDelegate.h; sourceTree = "<group>"; };
+		E3BCAB6215C6198800553E05 /* TCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TCAppDelegate.m; sourceTree = "<group>"; };
+		E3BCAB6415C6198800553E05 /* TCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TCViewController.h; sourceTree = "<group>"; };
+		E3BCAB6515C6198800553E05 /* TCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TCViewController.m; sourceTree = "<group>"; };
+		E3BCAB6815C6198800553E05 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/TCViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E3BCAB4B15C6198800553E05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3BCAB5315C6198800553E05 /* UIKit.framework in Frameworks */,
+				E3BCAB5515C6198800553E05 /* Foundation.framework in Frameworks */,
+				E3BCAB5715C6198800553E05 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E3BCAB4315C6198800553E05 = {
+			isa = PBXGroup;
+			children = (
+				E3BCAB5815C6198800553E05 /* tweet-composer */,
+				E3BCAB5115C6198800553E05 /* Frameworks */,
+				E3BCAB4F15C6198800553E05 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E3BCAB4F15C6198800553E05 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E3BCAB4E15C6198800553E05 /* tweet-composer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E3BCAB5115C6198800553E05 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E3BCAB5215C6198800553E05 /* UIKit.framework */,
+				E3BCAB5415C6198800553E05 /* Foundation.framework */,
+				E3BCAB5615C6198800553E05 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E3BCAB5815C6198800553E05 /* tweet-composer */ = {
+			isa = PBXGroup;
+			children = (
+				E3BCAB6115C6198800553E05 /* TCAppDelegate.h */,
+				E3BCAB6215C6198800553E05 /* TCAppDelegate.m */,
+				E3BCAB6415C6198800553E05 /* TCViewController.h */,
+				E3BCAB6515C6198800553E05 /* TCViewController.m */,
+				E3BCAB6715C6198800553E05 /* TCViewController.xib */,
+				E3BCAB5915C6198800553E05 /* Supporting Files */,
+			);
+			path = "tweet-composer";
+			sourceTree = "<group>";
+		};
+		E3BCAB5915C6198800553E05 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E3BCAB5A15C6198800553E05 /* tweet-composer-Info.plist */,
+				E3BCAB5B15C6198800553E05 /* InfoPlist.strings */,
+				E3BCAB5E15C6198800553E05 /* main.m */,
+				E3BCAB6015C6198800553E05 /* tweet-composer-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E3BCAB4D15C6198800553E05 /* tweet-composer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E3BCAB6C15C6198800553E05 /* Build configuration list for PBXNativeTarget "tweet-composer" */;
+			buildPhases = (
+				E3BCAB4A15C6198800553E05 /* Sources */,
+				E3BCAB4B15C6198800553E05 /* Frameworks */,
+				E3BCAB4C15C6198800553E05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "tweet-composer";
+			productName = "tweet-composer";
+			productReference = E3BCAB4E15C6198800553E05 /* tweet-composer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E3BCAB4515C6198800553E05 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = TC;
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = "Philip Dow";
+			};
+			buildConfigurationList = E3BCAB4815C6198800553E05 /* Build configuration list for PBXProject "tweet-composer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E3BCAB4315C6198800553E05;
+			productRefGroup = E3BCAB4F15C6198800553E05 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E3BCAB4D15C6198800553E05 /* tweet-composer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E3BCAB4C15C6198800553E05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3BCAB5D15C6198800553E05 /* InfoPlist.strings in Resources */,
+				E3BCAB6915C6198800553E05 /* TCViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E3BCAB4A15C6198800553E05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3BCAB5F15C6198800553E05 /* main.m in Sources */,
+				E3BCAB6315C6198800553E05 /* TCAppDelegate.m in Sources */,
+				E3BCAB6615C6198800553E05 /* TCViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E3BCAB5B15C6198800553E05 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E3BCAB5C15C6198800553E05 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		E3BCAB6715C6198800553E05 /* TCViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E3BCAB6815C6198800553E05 /* en */,
+			);
+			name = TCViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E3BCAB6A15C6198800553E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		E3BCAB6B15C6198800553E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E3BCAB6D15C6198800553E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tweet-composer/tweet-composer-Prefix.pch";
+				INFOPLIST_FILE = "tweet-composer/tweet-composer-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E3BCAB6E15C6198800553E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tweet-composer/tweet-composer-Prefix.pch";
+				INFOPLIST_FILE = "tweet-composer/tweet-composer-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E3BCAB4815C6198800553E05 /* Build configuration list for PBXProject "tweet-composer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3BCAB6A15C6198800553E05 /* Debug */,
+				E3BCAB6B15C6198800553E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E3BCAB6C15C6198800553E05 /* Build configuration list for PBXNativeTarget "tweet-composer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3BCAB6D15C6198800553E05 /* Debug */,
+				E3BCAB6E15C6198800553E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E3BCAB4515C6198800553E05 /* Project object */;
+}
