@@ -98,7 +98,13 @@ typedef void (^TCTweetComposeViewControllerCompletionHandler)(TCTweetComposeView
 
 /*  Custom additions. Again they must be called prior to displaying the view and
     will return NO if the view is already being displayed. The default value is
-    YES */
+    YES. 
+    
+    A UI note on showing URLs: The URLs are editable and the edited version will
+    be included in the tweet, not the original URL. Character counts reflect the
+    http://t.co/xxxxx length of the URL and not the length of the URL in the 
+    text, so that character counts may jump strangely as the user edits the URL.
+    */
 
 - (BOOL) setShowsImages:(BOOL)showsImages;
 - (BOOL) setShowsURLs:(BOOL)showsURLs;

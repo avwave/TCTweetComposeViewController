@@ -10,7 +10,7 @@ TCTweetComposeViewController is a drop in replacement for TWTweetComposeViewCont
 
 TCTweetComposeViewController solves the main problem by emulating the clean interface of the built in email message composer while preserving the functionality of the built in tweet composer.
 
-Because it is a drop in replacement, it is easy to add it to an existing project and will be simple to remove it if the built in tweet composer later changes.
+Because it is a drop in replacement, it is easy to add it to an existing project and it will be simple to remove if the built in tweet composer later changes.
 
 ## Usage
 
@@ -38,8 +38,12 @@ Our drop in replacement code looks like this:
 	};
 	[self presentModalViewController:twitter animated:YES];
 
+## Limitations
 
-##  License
+- Only supports Portrait orientation
+- Only supports a single image upload at a time
+
+## License
 
 BSD style license
 

@@ -288,8 +288,8 @@ static CGFloat TCTableRowHeight = 44.f;
 {
     // update the appearance
     [self setImageViewHidden:([_images count]==0)];
-    [self updateCharacterCount];
     [self updateAttachedURLs];
+    [self updateCharacterCount];
     
     // show the keyboard
     [[self messageTextView] becomeFirstResponder];
@@ -544,18 +544,30 @@ static CGFloat TCTableRowHeight = 44.f;
     // https://api.twitter.com/1/help/configuration.json
     
     static NSInteger kTwitterPicURLLength = 28;
-    static NSInteger kTwitterURLLength = 28;
+    static NSInteger kTwitterURLLength = 22;
     static NSInteger kMaxTweetLength = 140;
     
     UITextView *textView = [self messageTextView];
     UILabel *field = [self charCountTextField];
+    NSString *text = textView.text;
     
-    NSInteger length = [textView.text length];
+    NSInteger length = [text length];
     length += ([_images count]*kTwitterPicURLLength);
     
     if ( !_showsURLs ) {
         // length should include hidden URLs if we aren't showing them
         length += ([_URLs count]*kTwitterURLLength);
+    } else {
+        // we actually want to remove the length of the urls and replace them
+        // with the twitter url length
+        
+        NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+        NSArray *matches = [detector matchesInString:text options:0 range:NSMakeRange(0, [text length])];
+        for (NSTextCheckingResult *match in matches) {
+            NSRange matchRange = [match range];
+            length -= matchRange.length;
+            length += kTwitterURLLength;
+        }
     }
     
     NSInteger remaining = kMaxTweetLength - length;
