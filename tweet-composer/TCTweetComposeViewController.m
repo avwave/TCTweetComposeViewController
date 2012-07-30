@@ -48,6 +48,9 @@ static NSString * TCTweetNavBarTitle = @"Tweet";
 static NSString * TCSendButtonTitle = @"Send";
 static NSString * TCAccountLabel = @"Account:";
 
+// additional localizable strings used for error reporting
+// see bottom of class
+
 // API access points
 // https://dev.twitter.com/docs/ios/posting-images-using-twrequest
 static NSString * TCStatusUpdateURLString = @"https://api.twitter.com/1/statuses/update.json";
@@ -91,7 +94,7 @@ static CGFloat TCTableRowHeight = 44.f;
 
 #pragma mark -
 
-@interface TCTweetComposeViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate> {
+@interface TCTweetComposeViewController () <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIAlertViewDelegate> {
     
     // interface
     UITableViewCell *_accountCell;
@@ -133,6 +136,9 @@ static CGFloat TCTableRowHeight = 44.f;
 - (void) performTwitterPostStatusRequest:(TWRequest*)request;
 - (void) postStatusUpdateWithMedia;
 - (void) postStatusUpdate;
+
+- (UIAlertView*) twitterAccountsAlert;
+- (UIAlertView*) postStatusFailedAlert;
 
 @end
 
@@ -299,11 +305,7 @@ static CGFloat TCTableRowHeight = 44.f;
         if (error) {
             // display the error
             NSLog(@"Error acquiring twitter accounts: %@",error);
-            if ( self.completionHandler) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    self.completionHandler(TCTweetComposeViewControllerResultCancelled);
-                });
-            }
+            [[self twitterAccountsAlert] show];
             return;
         }
         _accounts = accounts;
@@ -695,6 +697,13 @@ static CGFloat TCTableRowHeight = 44.f;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if ( error ) {
             NSLog(@"Error performing twitter request: %@", error);
+            dispatch_async(dispatch_get_main_queue(),^{
+                UIAlertView *alert = [self postStatusFailedAlert];
+                alert.message = [error localizedDescription];
+                alert.delegate = self;
+                [alert show];
+            });
+            return;
         }/* else {
             NSStringEncoding responseEncoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)[urlResponse textEncodingName]));
             NSString *responseString = [[NSString alloc] initWithData:responseData encoding:responseEncoding];
@@ -742,6 +751,42 @@ static CGFloat TCTableRowHeight = 44.f;
             }
         }
     }];
+}
+
+#pragma mark Error Alerts
+
+- (UIAlertView*) twitterAccountsAlert
+{
+    NSString *title = NSLocalizedString(@"Twitter Account Unavailable", @"Twitter Account Unavailable");
+    NSString *message = NSLocalizedString(@"There was a problem accessing your twitter accounts", @"Twitter Account Unavailable Message");
+    NSString *button = NSLocalizedString(@"Continue", @"Continue");
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:button otherButtonTitles: nil];
+    
+    return alert;
+}
+
+- (UIAlertView*) postStatusFailedAlert
+{
+    NSString *title = NSLocalizedString(@"Unable to Send Tweet", @"Unable to Send Tweet");
+    NSString *message = NSLocalizedString(@"There was a problem sending your tweet. Check your internet connection and the length of your tweet.", @"Unable to Send Tweet Message");
+    NSString *button = NSLocalizedString(@"Continue", @"Continue");
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:button otherButtonTitles: nil];
+    
+    return alert;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    // any alert indicates an error, and we dispatch to the completion handler
+    // with a cancel
+    
+    if ( self.completionHandler) {
+        dispatch_async(dispatch_get_main_queue(),^{
+            self.completionHandler(TCTweetComposeViewControllerResultCancelled);
+        });
+    }
 }
 
 @end
