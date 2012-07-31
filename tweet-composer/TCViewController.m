@@ -78,10 +78,10 @@
     //[twitter addImage:[UIImage imageNamed:@"github.png"]];
     
     twitter.completionHandler = ^(TCTweetComposeViewControllerResult result) {
-        [self dismissModalViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     };
     
-    [self presentModalViewController:twitter animated:YES];
+    [self presentViewController:twitter animated:YES completion:nil];
 }
 
 - (UIAlertView*) twitterAccountsAlert
