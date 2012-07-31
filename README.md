@@ -41,7 +41,11 @@ Our drop in replacement code looks like this:
 ## Limitations
 
 - Only supports Portrait orientation
+- Only works on the iPhone. Might work on iPad, hasn't been tested
 - Only supports a single image upload at a time
+- Does not support optional location data
+
+These limitations are probably temporary and could be fixed with a bit more coding.
 
 ## License
 
