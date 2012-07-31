@@ -68,6 +68,7 @@
 {    
     if (![TCTweetComposeViewController canSendTweet]) {
         NSLog(@"Cannot send tweets, no account set up");
+        [[self twitterAccountsAlert] show];
         return;
     }
     
@@ -82,5 +83,17 @@
     
     [self presentModalViewController:twitter animated:YES];
 }
+
+- (UIAlertView*) twitterAccountsAlert
+{
+    NSString *title = NSLocalizedString(@"Twitter Account Unavailable", @"Twitter Account Unavailable");
+    NSString *message = NSLocalizedString(@"There was a problem accessing your twitter accounts. You're probably on the simulator.", @"Twitter Account Unavailable Message");
+    NSString *button = NSLocalizedString(@"Continue", @"Continue");
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:button otherButtonTitles: nil];
+    
+    return alert;
+}
+
 
 @end
